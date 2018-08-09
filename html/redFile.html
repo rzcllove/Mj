@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title> New Document </title>
+ </head>
+<script type="text/javascript">
+ function readFolder(){
+ var filePath = "d:\\ZTLJ\\";
+ var fso;
+ try {
+    fso  = new ActiveXObject("Scripting.FileSystemObject");   //加载控件
+ }
+ catch(err){
+	alert('游览器不支持该控件或控件被禁用');
+ }
+ if(!fso){
+	 return;
+ }
+ var f = fso.GetFolder(filePath);
+ var underFiles = new Enumerator(f.files); //文件夹下文件
+	for (;!underFiles.atEnd();underFiles.moveNext()){   
+          var fn = "" + underFiles.item();   
+               //alert(fn);
+          var content = readFile(fn,fso);
+          alert(content);
+    }  
+ }
+function readFile(path,fso){
+var f1 = fso.GetFile(path);
+var fh = fso.OpenTextFile(f1, 1/*reading*/);
+               var content = '';
+               while ( !fh.AtEndOfStream ) {
+                      content += fh.ReadLine();
+               }
+               fh.close()
+      return content;
+}
+function writeExcel(){
+var ExcelApp;
+ try {
+    ExcelApp  = new ActiveXObject("Excel.Application");   //加载控件
+ }
+ catch(err){
+	alert('游览器不支持该控件或控件被禁用');
+ }
+ if(!ExcelApp){
+	 return;
+ }
+ var ExcelSheet = new ActiveXObject("Excel.Sheet");
+ ExcelSheet.Application.Visible = true;
+ ExcelSheet.ActiveSheet.Cells(1,1).Value = "This is column A, row 1";
+ ExcelSheet.SaveAs("d:\\TEST.XLS");
+ ExcelSheet.Application.Quit();
+}
+</script>
+ <body>
+  <input type="button" value="readFolder" onclick="readFolder()">
+<input type="button" value="WriteExcel" onclick="writeExcel()">
+ </body>
+</html>

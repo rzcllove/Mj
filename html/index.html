@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/index.css">
+	 <script type="text/javascript" src="./lib/jquery.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div class="bg-wrap" @click="hideMenu" @mouseup="clearTimer">
+        <div v-for="(point, index) in points" @click="menuShow(point, index)" :id="point.id" :class="{box: point.is, point: true}" :style="{'top': point.location.top+'rem', 'left': point.location.left+'rem'}">
+          <div class="point-content" v-for="(p,pindex) in point.points"  :class="p.classa" :style="p.type" @touchstart="pointDown(pindex)" @touchend="pointUp(point.id)">
+		    <span v-if="p.img"><img :src="'./images/'+p.img" style='width: 0.36rem; height: 0.36rem;' /></span>
+			<span v-else>{{p.content}}</span>
+            <div class="point-delete" v-if="hoverId === point.id" @click="removePoint(pindex)">x</div>
+          </div>
+        </div>
+        <div class="menu-one" :style="menu1Pos" v-if="menu1Show">
+          <div class="menu1-list" v-for="menu1,menu1Index in menu1Lists" :style="{transform: `rotateZ(${menu1.deg}deg)`}">
+            <div class="ractangle"  @click="menu1Click(menu1Index)">
+              <img class="ractangle-img" :src="'./images/'+menu1.imgUrl" :style="{transform: `rotateZ(${-menu1.deg}deg)`}" alt="">
+            </div>
+          </div>
+        </div>
+        <div class="menu-two" v-for="menu2,menu2Index in menu2Lists" :style="menu2Pos" v-if="selectMenu2 === menu2Index">
+          <div class="menu2-list" v-for="item,index in menu2" >
+		  <span @click="menu2Click(item.name, index)">{{item.name}}</span>
+		  <div class="menu2-delete" @click="Deletemenu2Click(menu2Index,index)" v-if = "menu2Index===3 || menu2Index===4 ">x</div>
+		  </div>
+		  <div class="menu2-list" @click="menu2add(menu2Index)" v-if = "menu2Index===3 || menu2Index===4 "> + </div>
+        </div>
+        <table class="tables">
+          <tr class="table-row" v-for="tr,index in tables">
+            <td class="table-block"><input :id="'car'+index" clsss="table-block-input" spellcheck="false" type="text"  @touchstart="fornvalue" @touchend="focusCar(index)"  v-longtap="fornvalue" v-model="tr.car"/></td>
+            <td class="table-block"><input clsss="table-block-input" spellcheck="false" type="text" v-model="tr.direct"/></td>
+            <td class="table-block"><select clsss="table-block-select" name="" id="" v-model="tr.zhanyong">
+              <option value="null"></option>
+              <option value="+">+</option>
+              <option value="-">-</option>
+              <option value="⊕">⊕</option>
+            </select></td>
+          </tr>
+          <!-- <tr class="table-row">
+            <td class="table-block" contenteditable="true"></td>
+            <td class="table-block" contenteditable="true"></td>
+            <td class="table-block" contenteditable="true"></td>
+          </tr>
+          <tr class="table-row">
+            <td class="table-block" contenteditable="true"></td>
+            <td class="table-block" contenteditable="true"></td>
+            <td class="table-block" contenteditable="true"></td>
+          </tr>
+          <tr class="table-row">
+            <td class="table-block" contenteditable="true"></td>
+            <td class="table-block" contenteditable="true"></td>
+            <td class="table-block" contenteditable="true"></td>
+          </tr>
+          <tr class="table-row">
+            <td class="table-block" contenteditable="true"></td>
+            <td class="table-block" contenteditable="true"></td>
+            <td class="table-block" contenteditable="true"></td>
+          </tr>
+          <tr class="table-row">
+            <td class="table-block" contenteditable="true"></td>
+            <td class="table-block" contenteditable="true"></td>
+            <td class="table-block" contenteditable="true"></td>
+          </tr> -->
+        </table>
+		<div  id="cd" class="menu-two" style="top: 1.2rem; left: 10.5rem;display:none" >
+			<div class="menu2-list" value="+" onclick="js('+')">+</div>
+			<div class="menu2-list" value="-" onclick="js('-')">-</div>
+			<div class="menu2-list" value="⊕" onclick="js('⊕')">⊕</div>
+		</div> 
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+      var resetFn = (function resetHtmlFontSize () {
+              var oHt = document.getElementsByTagName("html")[0];
+              var iW = document.documentElement.clientWidth;
+              var base = 1920 / 100;
+              oHt.style.fontSize = iW / base + "px";
+              return resetHtmlFontSize
+         })();
+       window.addEventListener("resize", resetFn ,false);
+       document.addEventListener('DOMContentLoaded', resetFn, false);
+	   
+   $(document).bind('click', function(e) {  
+        var e = e || window.event; //浏览器兼容性   
+        var elem = e.target || e.srcElement;  
+        while (elem) { //循环判断至跟节点，防止点击的是div子元素   
+            if (elem.id && elem.id == 'cd') {  
+                return;  
+            }  
+            elem = elem.parentNode;  
+        }  
+        $('#cd').css('display', 'none'); //点击的不是div或其子元素   
+    });
+  </script>
+  <script type="text/javascript" src="./lib/point.js"></script>
+  <script type="text/javascript" src="./lib/vue.min.js"></script>
+   <script type="text/javascript" src="./lib/layer_mobile/layer.js"></script>
+  <script type="text/javascript" src="./js/index.js"></script>
+</html>
